@@ -1,64 +1,68 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
-part 'oauth_config_model.freezed.dart';
 part 'oauth_config_model.g.dart';
+part 'oauth_config_model.freezed.dart';
 
-/// OAuth 2.0 flow types supported by APIDash
 enum OAuthFlow {
-  /// Client Credentials flow (no user interaction)
-  clientCredentials,
-
-  /// Authorization Code flow (with browser redirect)
   authorizationCode,
-
-  /// Resource Owner Password Grant flow
-  resourceOwnerPassword
 }
 
-/// OAuth 2.0 Configuration Model
 @freezed
 class OAuthConfig with _$OAuthConfig {
   const OAuthConfig._();
 
-  @JsonSerializable(explicitToJson: true)
   const factory OAuthConfig({
     /// Unique identifier for this OAuth configuration
-    String? id,
+    required String id,
+
+    /// Name of the configuration
+    required String name,
 
     /// OAuth Flow type
-    @Default(OAuthFlow.authorizationCode) OAuthFlow flow,
+    required OAuthFlow flow,
 
     /// Client ID from OAuth provider
-    @Default('') String clientId,
+    required String clientId,
 
-    /// Client Secret from OAuth provider (optional for some flows)
-    String? clientSecret,
+    /// Client Secret from OAuth provider
+    required String clientSecret,
 
     /// Authorization endpoint URL
-    @Default('') String authorizationEndpoint,
+    required String authUrl,
 
     /// Token endpoint URL
-    @Default('') String tokenEndpoint,
+    required String tokenEndpoint,
 
-    /// Redirect URI for OAuth callback
-    @Default('http://localhost:8080/callback') String redirectUri,
+    /// Callback URL for OAuth
+    required String callbackUrl,
 
-    /// OAuth scopes
-    @Default([]) List<String> scopes,
+    /// OAuth scope
+    required String scope,
 
-    /// Optional state parameter for CSRF protection
-    String? state,
+    /// State
+    required String state,
 
-    /// Optional description for this OAuth configuration
-    String? description,
+    /// Auto refresh token option
+    @Default(false) bool autoRefresh,
 
-    /// Username for Resource Owner Password Grant flow
-    String? username,
-
-    /// Password for Resource Owner Password Grant flow
-    String? password,
+    /// Share token option
+    @Default(false) bool shareToken,
   }) = _OAuthConfig;
 
-  factory OAuthConfig.fromJson(Map<String, dynamic> json) => 
+  factory OAuthConfig.fromJson(Map<String, dynamic> json) =>
       _$OAuthConfigFromJson(json);
+
+  factory OAuthConfig.empty() => OAuthConfig(
+        id: const Uuid().v4(),
+        name: '',
+        flow: OAuthFlow.authorizationCode,
+        clientId: '',
+        clientSecret: '',
+        authUrl: '',
+        tokenEndpoint: '',
+        callbackUrl: '',
+        scope: '',
+        state: '',
+      );
 }

@@ -21,7 +21,10 @@ OAuthConfig _$OAuthConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$OAuthConfig {
   /// Unique identifier for this OAuth configuration
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+
+  /// Name of the configuration
+  String get name => throw _privateConstructorUsedError;
 
   /// OAuth Flow type
   OAuthFlow get flow => throw _privateConstructorUsedError;
@@ -29,32 +32,29 @@ mixin _$OAuthConfig {
   /// Client ID from OAuth provider
   String get clientId => throw _privateConstructorUsedError;
 
-  /// Client Secret from OAuth provider (optional for some flows)
-  String? get clientSecret => throw _privateConstructorUsedError;
+  /// Client Secret from OAuth provider
+  String get clientSecret => throw _privateConstructorUsedError;
 
   /// Authorization endpoint URL
-  String get authorizationEndpoint => throw _privateConstructorUsedError;
+  String get authUrl => throw _privateConstructorUsedError;
 
   /// Token endpoint URL
   String get tokenEndpoint => throw _privateConstructorUsedError;
 
-  /// Redirect URI for OAuth callback
-  String get redirectUri => throw _privateConstructorUsedError;
+  /// Callback URL for OAuth
+  String get callbackUrl => throw _privateConstructorUsedError;
 
-  /// OAuth scopes
-  List<String> get scopes => throw _privateConstructorUsedError;
+  /// OAuth scope
+  String get scope => throw _privateConstructorUsedError;
 
-  /// Optional state parameter for CSRF protection
-  String? get state => throw _privateConstructorUsedError;
+  /// State
+  String get state => throw _privateConstructorUsedError;
 
-  /// Optional description for this OAuth configuration
-  String? get description => throw _privateConstructorUsedError;
+  /// Auto refresh token option
+  bool get autoRefresh => throw _privateConstructorUsedError;
 
-  /// Username for Resource Owner Password Grant flow
-  String? get username => throw _privateConstructorUsedError;
-
-  /// Password for Resource Owner Password Grant flow
-  String? get password => throw _privateConstructorUsedError;
+  /// Share token option
+  bool get shareToken => throw _privateConstructorUsedError;
 
   /// Serializes this OAuthConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -73,18 +73,18 @@ abstract class $OAuthConfigCopyWith<$Res> {
       _$OAuthConfigCopyWithImpl<$Res, OAuthConfig>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
+      String name,
       OAuthFlow flow,
       String clientId,
-      String? clientSecret,
-      String authorizationEndpoint,
+      String clientSecret,
+      String authUrl,
       String tokenEndpoint,
-      String redirectUri,
-      List<String> scopes,
-      String? state,
-      String? description,
-      String? username,
-      String? password});
+      String callbackUrl,
+      String scope,
+      String state,
+      bool autoRefresh,
+      bool shareToken});
 }
 
 /// @nodoc
@@ -102,24 +102,28 @@ class _$OAuthConfigCopyWithImpl<$Res, $Val extends OAuthConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? flow = null,
     Object? clientId = null,
-    Object? clientSecret = freezed,
-    Object? authorizationEndpoint = null,
+    Object? clientSecret = null,
+    Object? authUrl = null,
     Object? tokenEndpoint = null,
-    Object? redirectUri = null,
-    Object? scopes = null,
-    Object? state = freezed,
-    Object? description = freezed,
-    Object? username = freezed,
-    Object? password = freezed,
+    Object? callbackUrl = null,
+    Object? scope = null,
+    Object? state = null,
+    Object? autoRefresh = null,
+    Object? shareToken = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       flow: null == flow
           ? _value.flow
           : flow // ignore: cast_nullable_to_non_nullable
@@ -128,42 +132,38 @@ class _$OAuthConfigCopyWithImpl<$Res, $Val extends OAuthConfig>
           ? _value.clientId
           : clientId // ignore: cast_nullable_to_non_nullable
               as String,
-      clientSecret: freezed == clientSecret
+      clientSecret: null == clientSecret
           ? _value.clientSecret
           : clientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorizationEndpoint: null == authorizationEndpoint
-          ? _value.authorizationEndpoint
-          : authorizationEndpoint // ignore: cast_nullable_to_non_nullable
+              as String,
+      authUrl: null == authUrl
+          ? _value.authUrl
+          : authUrl // ignore: cast_nullable_to_non_nullable
               as String,
       tokenEndpoint: null == tokenEndpoint
           ? _value.tokenEndpoint
           : tokenEndpoint // ignore: cast_nullable_to_non_nullable
               as String,
-      redirectUri: null == redirectUri
-          ? _value.redirectUri
-          : redirectUri // ignore: cast_nullable_to_non_nullable
+      callbackUrl: null == callbackUrl
+          ? _value.callbackUrl
+          : callbackUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      scopes: null == scopes
-          ? _value.scopes
-          : scopes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      state: freezed == state
+      scope: null == scope
+          ? _value.scope
+          : scope // ignore: cast_nullable_to_non_nullable
+              as String,
+      state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      autoRefresh: null == autoRefresh
+          ? _value.autoRefresh
+          : autoRefresh // ignore: cast_nullable_to_non_nullable
+              as bool,
+      shareToken: null == shareToken
+          ? _value.shareToken
+          : shareToken // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -177,18 +177,18 @@ abstract class _$$OAuthConfigImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
+      String name,
       OAuthFlow flow,
       String clientId,
-      String? clientSecret,
-      String authorizationEndpoint,
+      String clientSecret,
+      String authUrl,
       String tokenEndpoint,
-      String redirectUri,
-      List<String> scopes,
-      String? state,
-      String? description,
-      String? username,
-      String? password});
+      String callbackUrl,
+      String scope,
+      String state,
+      bool autoRefresh,
+      bool shareToken});
 }
 
 /// @nodoc
@@ -204,24 +204,28 @@ class __$$OAuthConfigImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
+    Object? name = null,
     Object? flow = null,
     Object? clientId = null,
-    Object? clientSecret = freezed,
-    Object? authorizationEndpoint = null,
+    Object? clientSecret = null,
+    Object? authUrl = null,
     Object? tokenEndpoint = null,
-    Object? redirectUri = null,
-    Object? scopes = null,
-    Object? state = freezed,
-    Object? description = freezed,
-    Object? username = freezed,
-    Object? password = freezed,
+    Object? callbackUrl = null,
+    Object? scope = null,
+    Object? state = null,
+    Object? autoRefresh = null,
+    Object? shareToken = null,
   }) {
     return _then(_$OAuthConfigImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       flow: null == flow
           ? _value.flow
           : flow // ignore: cast_nullable_to_non_nullable
@@ -230,133 +234,116 @@ class __$$OAuthConfigImplCopyWithImpl<$Res>
           ? _value.clientId
           : clientId // ignore: cast_nullable_to_non_nullable
               as String,
-      clientSecret: freezed == clientSecret
+      clientSecret: null == clientSecret
           ? _value.clientSecret
           : clientSecret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorizationEndpoint: null == authorizationEndpoint
-          ? _value.authorizationEndpoint
-          : authorizationEndpoint // ignore: cast_nullable_to_non_nullable
+              as String,
+      authUrl: null == authUrl
+          ? _value.authUrl
+          : authUrl // ignore: cast_nullable_to_non_nullable
               as String,
       tokenEndpoint: null == tokenEndpoint
           ? _value.tokenEndpoint
           : tokenEndpoint // ignore: cast_nullable_to_non_nullable
               as String,
-      redirectUri: null == redirectUri
-          ? _value.redirectUri
-          : redirectUri // ignore: cast_nullable_to_non_nullable
+      callbackUrl: null == callbackUrl
+          ? _value.callbackUrl
+          : callbackUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      scopes: null == scopes
-          ? _value._scopes
-          : scopes // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      state: freezed == state
+      scope: null == scope
+          ? _value.scope
+          : scope // ignore: cast_nullable_to_non_nullable
+              as String,
+      state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      autoRefresh: null == autoRefresh
+          ? _value.autoRefresh
+          : autoRefresh // ignore: cast_nullable_to_non_nullable
+              as bool,
+      shareToken: null == shareToken
+          ? _value.shareToken
+          : shareToken // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$OAuthConfigImpl extends _OAuthConfig {
   const _$OAuthConfigImpl(
-      {this.id,
-      this.flow = OAuthFlow.authorizationCode,
-      this.clientId = '',
-      this.clientSecret,
-      this.authorizationEndpoint = '',
-      this.tokenEndpoint = '',
-      this.redirectUri = 'http://localhost:8080/callback',
-      final List<String> scopes = const [],
-      this.state,
-      this.description,
-      this.username,
-      this.password})
-      : _scopes = scopes,
-        super._();
+      {required this.id,
+      required this.name,
+      required this.flow,
+      required this.clientId,
+      required this.clientSecret,
+      required this.authUrl,
+      required this.tokenEndpoint,
+      required this.callbackUrl,
+      required this.scope,
+      required this.state,
+      this.autoRefresh = false,
+      this.shareToken = false})
+      : super._();
 
   factory _$OAuthConfigImpl.fromJson(Map<String, dynamic> json) =>
       _$$OAuthConfigImplFromJson(json);
 
   /// Unique identifier for this OAuth configuration
   @override
-  final String? id;
+  final String id;
+
+  /// Name of the configuration
+  @override
+  final String name;
 
   /// OAuth Flow type
   @override
-  @JsonKey()
   final OAuthFlow flow;
 
   /// Client ID from OAuth provider
   @override
-  @JsonKey()
   final String clientId;
 
-  /// Client Secret from OAuth provider (optional for some flows)
+  /// Client Secret from OAuth provider
   @override
-  final String? clientSecret;
+  final String clientSecret;
 
   /// Authorization endpoint URL
   @override
-  @JsonKey()
-  final String authorizationEndpoint;
+  final String authUrl;
 
   /// Token endpoint URL
   @override
-  @JsonKey()
   final String tokenEndpoint;
 
-  /// Redirect URI for OAuth callback
+  /// Callback URL for OAuth
+  @override
+  final String callbackUrl;
+
+  /// OAuth scope
+  @override
+  final String scope;
+
+  /// State
+  @override
+  final String state;
+
+  /// Auto refresh token option
   @override
   @JsonKey()
-  final String redirectUri;
+  final bool autoRefresh;
 
-  /// OAuth scopes
-  final List<String> _scopes;
-
-  /// OAuth scopes
+  /// Share token option
   @override
   @JsonKey()
-  List<String> get scopes {
-    if (_scopes is EqualUnmodifiableListView) return _scopes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_scopes);
-  }
-
-  /// Optional state parameter for CSRF protection
-  @override
-  final String? state;
-
-  /// Optional description for this OAuth configuration
-  @override
-  final String? description;
-
-  /// Username for Resource Owner Password Grant flow
-  @override
-  final String? username;
-
-  /// Password for Resource Owner Password Grant flow
-  @override
-  final String? password;
+  final bool shareToken;
 
   @override
   String toString() {
-    return 'OAuthConfig(id: $id, flow: $flow, clientId: $clientId, clientSecret: $clientSecret, authorizationEndpoint: $authorizationEndpoint, tokenEndpoint: $tokenEndpoint, redirectUri: $redirectUri, scopes: $scopes, state: $state, description: $description, username: $username, password: $password)';
+    return 'OAuthConfig(id: $id, name: $name, flow: $flow, clientId: $clientId, clientSecret: $clientSecret, authUrl: $authUrl, tokenEndpoint: $tokenEndpoint, callbackUrl: $callbackUrl, scope: $scope, state: $state, autoRefresh: $autoRefresh, shareToken: $shareToken)';
   }
 
   @override
@@ -365,25 +352,23 @@ class _$OAuthConfigImpl extends _OAuthConfig {
         (other.runtimeType == runtimeType &&
             other is _$OAuthConfigImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.flow, flow) || other.flow == flow) &&
             (identical(other.clientId, clientId) ||
                 other.clientId == clientId) &&
             (identical(other.clientSecret, clientSecret) ||
                 other.clientSecret == clientSecret) &&
-            (identical(other.authorizationEndpoint, authorizationEndpoint) ||
-                other.authorizationEndpoint == authorizationEndpoint) &&
+            (identical(other.authUrl, authUrl) || other.authUrl == authUrl) &&
             (identical(other.tokenEndpoint, tokenEndpoint) ||
                 other.tokenEndpoint == tokenEndpoint) &&
-            (identical(other.redirectUri, redirectUri) ||
-                other.redirectUri == redirectUri) &&
-            const DeepCollectionEquality().equals(other._scopes, _scopes) &&
+            (identical(other.callbackUrl, callbackUrl) ||
+                other.callbackUrl == callbackUrl) &&
+            (identical(other.scope, scope) || other.scope == scope) &&
             (identical(other.state, state) || other.state == state) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.password, password) ||
-                other.password == password));
+            (identical(other.autoRefresh, autoRefresh) ||
+                other.autoRefresh == autoRefresh) &&
+            (identical(other.shareToken, shareToken) ||
+                other.shareToken == shareToken));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -391,17 +376,17 @@ class _$OAuthConfigImpl extends _OAuthConfig {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      name,
       flow,
       clientId,
       clientSecret,
-      authorizationEndpoint,
+      authUrl,
       tokenEndpoint,
-      redirectUri,
-      const DeepCollectionEquality().hash(_scopes),
+      callbackUrl,
+      scope,
       state,
-      description,
-      username,
-      password);
+      autoRefresh,
+      shareToken);
 
   /// Create a copy of OAuthConfig
   /// with the given fields replaced by the non-null parameter values.
@@ -421,18 +406,18 @@ class _$OAuthConfigImpl extends _OAuthConfig {
 
 abstract class _OAuthConfig extends OAuthConfig {
   const factory _OAuthConfig(
-      {final String? id,
-      final OAuthFlow flow,
-      final String clientId,
-      final String? clientSecret,
-      final String authorizationEndpoint,
-      final String tokenEndpoint,
-      final String redirectUri,
-      final List<String> scopes,
-      final String? state,
-      final String? description,
-      final String? username,
-      final String? password}) = _$OAuthConfigImpl;
+      {required final String id,
+      required final String name,
+      required final OAuthFlow flow,
+      required final String clientId,
+      required final String clientSecret,
+      required final String authUrl,
+      required final String tokenEndpoint,
+      required final String callbackUrl,
+      required final String scope,
+      required final String state,
+      final bool autoRefresh,
+      final bool shareToken}) = _$OAuthConfigImpl;
   const _OAuthConfig._() : super._();
 
   factory _OAuthConfig.fromJson(Map<String, dynamic> json) =
@@ -440,7 +425,11 @@ abstract class _OAuthConfig extends OAuthConfig {
 
   /// Unique identifier for this OAuth configuration
   @override
-  String? get id;
+  String get id;
+
+  /// Name of the configuration
+  @override
+  String get name;
 
   /// OAuth Flow type
   @override
@@ -450,41 +439,37 @@ abstract class _OAuthConfig extends OAuthConfig {
   @override
   String get clientId;
 
-  /// Client Secret from OAuth provider (optional for some flows)
+  /// Client Secret from OAuth provider
   @override
-  String? get clientSecret;
+  String get clientSecret;
 
   /// Authorization endpoint URL
   @override
-  String get authorizationEndpoint;
+  String get authUrl;
 
   /// Token endpoint URL
   @override
   String get tokenEndpoint;
 
-  /// Redirect URI for OAuth callback
+  /// Callback URL for OAuth
   @override
-  String get redirectUri;
+  String get callbackUrl;
 
-  /// OAuth scopes
+  /// OAuth scope
   @override
-  List<String> get scopes;
+  String get scope;
 
-  /// Optional state parameter for CSRF protection
+  /// State
   @override
-  String? get state;
+  String get state;
 
-  /// Optional description for this OAuth configuration
+  /// Auto refresh token option
   @override
-  String? get description;
+  bool get autoRefresh;
 
-  /// Username for Resource Owner Password Grant flow
+  /// Share token option
   @override
-  String? get username;
-
-  /// Password for Resource Owner Password Grant flow
-  @override
-  String? get password;
+  bool get shareToken;
 
   /// Create a copy of OAuthConfig
   /// with the given fields replaced by the non-null parameter values.

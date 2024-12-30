@@ -1,11 +1,8 @@
+import 'package:apidash/screens/oauth_config_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../screens/screens.dart';
-import 'package:apidash/screens/oauth_config_list_screen.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:apidash_design_system/apidash_design_system.dart';
 import '../providers/providers.dart';
 import '../services/services.dart';
@@ -52,14 +49,7 @@ class SettingsPage extends ConsumerWidget {
                 ListTile(
                   title: const Text('OAuth Configurations'),
                   subtitle: const Text('Manage OAuth 2.0 configurations'),
-                  leading: const Icon(Icons.lock_outline),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const OAuthConfigListScreen(),
-                      ),
-                    );
-                  },
+                  onTap: () => _showOAuthConfigDialog(context),
                 ),
                 SwitchListTile(
                   hoverColor: kColorTransparent,
@@ -206,7 +196,7 @@ class SettingsPage extends ConsumerWidget {
                                   constraints:
                                       const BoxConstraints(maxWidth: 300),
                                   child: const Text(
-                                      'This action will clear all the requests data from the disk and is irreversible. Do you want to proceed?'),
+                                      'This action will clear all the requests d ata from the disk and is irreversible. Do you want to proceed?'),
                                 ),
                                 actions: <Widget>[
                                   TextButton(
@@ -246,17 +236,6 @@ class SettingsPage extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.vpn_key),
-                  title: const Text('OAuth Configurations'),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const OAuthConfigListScreen(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
                   title: const Text('About'),
                   subtitle: const Text(
                       'Release Details, Support Channel, Report Bug / Request New Feature'),
@@ -270,6 +249,24 @@ class SettingsPage extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showOAuthConfigDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.width * 0.8 * 1.5,
+            child: OAuthConfigListScreen(),
+          ),
+        );
+      },
     );
   }
 }

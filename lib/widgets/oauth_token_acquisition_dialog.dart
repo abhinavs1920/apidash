@@ -42,13 +42,16 @@ class _OAuthTokenAcquisitionDialogState extends ConsumerState<OAuthTokenAcquisit
           .read(oauthCredentialsProvider.notifier)
           .acquireCredentials(_selectedConfig!);
       
-      // Successfully acquired credentials
-      Navigator.of(context).pop(credentials);
+      if (mounted) {
+        Navigator.of(context).pop(credentials);
+      }
     } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString();
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -67,7 +70,7 @@ class _OAuthTokenAcquisitionDialogState extends ConsumerState<OAuthTokenAcquisit
             items: configs
                 .map((config) => DropdownMenuItem(
                       value: config,
-                      child: Text(config.description ?? config.clientId),
+                      child: Text(config.name ?? config.clientId),
                     ))
                 .toList(),
             onChanged: _isLoading 

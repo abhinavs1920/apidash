@@ -1,16 +1,48 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:convert';
 
 import '../models/oauth_config_model.dart';
 
 class OAuthConfigNotifier extends StateNotifier<List<OAuthConfig>> {
+  static const _configKey = 'oauth_configs';
+
   OAuthConfigNotifier() : super([]) {
-    print('[OAuth Config] Initializing OAuthConfigNotifier');
+    _loadConfigs();
   }
 
-  void addConfig(OAuthConfig config) {
-    print('\n[OAuth Config] Adding new OAuth configuration');
-    // Assign a unique ID if not provided
+  Future<void> _loadConfigs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final configsJson = prefs.getString(_configKey);
+      if (configsJson != null) {
+        final List<dynamic> configsList = jsonDecode(configsJson);
+        state = configsList.map((json) => OAuthConfig.fromJson(json)).toList();
+        print('[OAuth Config] Loaded configurations: ${state.length}');
+        for (var config in state) {
+          print('[OAuth Config] Config ID: ${config.id}, Name: ${config.name}');
+        }
+      } else {
+        print('[OAuth Config] No configurations found in storage.');
+      }
+    } catch (e) {
+      print('[OAuth Config] Error loading configurations: $e');
+    }
+  }
+
+  Future<void> _saveConfigs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final configsJson = jsonEncode(state.map((config) => config.toJson()).toList());
+      await prefs.setString(_configKey, configsJson);
+      print('[OAuth Config] Configurations saved successfully.');
+    } catch (e) {
+      print('[OAuth Config] Error saving OAuth configs: $e');
+    }
+  }
+
+  Future<void> addConfig(OAuthConfig config) async {
     final configToAdd = config.id == null 
         ? config.copyWith(id: const Uuid().v4()) 
         : config;
@@ -18,32 +50,36 @@ class OAuthConfigNotifier extends StateNotifier<List<OAuthConfig>> {
     print('[OAuth Config] Config details:');
     print('[OAuth Config] ID: ${configToAdd.id}');
     print('[OAuth Config] Flow: ${configToAdd.flow}');
-    print('[OAuth Config] Auth Endpoint: ${configToAdd.authorizationEndpoint}');
     print('[OAuth Config] Token Endpoint: ${configToAdd.tokenEndpoint}');
-    print('[OAuth Config] Scopes: ${configToAdd.scopes}');
     
     state = [...state, configToAdd];
+    await _saveConfigs();
+    await _loadConfigs(); // Reload configs after saving
     print('[OAuth Config] Configuration added successfully');
   }
 
-  void updateConfig(OAuthConfig config) {
+  Future<void> updateConfig(OAuthConfig config) async {
     print('\n[OAuth Config] Updating OAuth configuration');
     print('[OAuth Config] Config ID: ${config.id}');
     print('[OAuth Config] Updated details:');
     print('[OAuth Config] Flow: ${config.flow}');
-    print('[OAuth Config] Auth Endpoint: ${config.authorizationEndpoint}');
     print('[OAuth Config] Token Endpoint: ${config.tokenEndpoint}');
-    print('[OAuth Config] Scopes: ${config.scopes}');
 
-    state = [
+    final updatedState = [
       for (final existingConfig in state)
-        if (existingConfig.id == config.id) config
-        else existingConfig
+        if (existingConfig.id == config.id) config else existingConfig
     ];
+
+    if (!updatedState.contains(config)) {
+      updatedState.add(config);
+    }
+    
+    state = updatedState;
+    await _saveConfigs();
     print('[OAuth Config] Configuration updated successfully');
   }
 
-  void removeConfig(String configId) {
+  Future<void> removeConfig(String configId) async {
     print('\n[OAuth Config] Removing OAuth configuration');
     print('[OAuth Config] Config ID to remove: $configId');
     
@@ -51,6 +87,7 @@ class OAuthConfigNotifier extends StateNotifier<List<OAuthConfig>> {
     state = state.where((config) => config.id != configId).toList();
     
     if (state.length < initialLength) {
+      await _saveConfigs();
       print('[OAuth Config] Configuration removed successfully');
     } else {
       print('[OAuth Config] Configuration not found for removal');
@@ -72,6 +109,16 @@ class OAuthConfigNotifier extends StateNotifier<List<OAuthConfig>> {
       rethrow;
     }
   }
+
+  Future<void> saveConfig(OAuthConfig config) async {
+    if (config.id == null) {
+      await addConfig(config);
+    } else {
+      await updateConfig(config);
+    }
+    await _loadConfigs(); // Reload configs after saving
+  }
+
 }
 
 final oauthConfigProvider = StateNotifierProvider<OAuthConfigNotifier, List<OAuthConfig>>((ref) {

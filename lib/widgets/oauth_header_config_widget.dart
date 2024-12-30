@@ -79,7 +79,7 @@ class _OAuthHeaderConfigWidgetState extends ConsumerState<OAuthHeaderConfigWidge
     if (result != null) {
       setState(() {
         _selectedCredentials = result;
-        _customHeaderController.text = result.accessToken;
+        _customHeaderController.text = result.accessToken!;
       });
       _updateHeaders();
     }
@@ -165,7 +165,7 @@ class _OAuthHeaderConfigWidgetState extends ConsumerState<OAuthHeaderConfigWidge
         if (_selectedConfig != null) ...[
           const SizedBox(height: 8),
           Text(
-            'OAuth Config: ${_selectedConfig!.description ?? _selectedConfig!.clientId}',
+            'OAuth Config: ${_selectedConfig!.name ?? _selectedConfig!.clientId}',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -197,7 +197,7 @@ class OAuthConfigListDialog extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: configs
                     .map((config) => ListTile(
-                          title: Text(config.description ?? config.clientId),
+                          title: Text(config.name ?? config.clientId),
                           subtitle: Text(config.flow.name),
                           onTap: () => Navigator.of(context).pop(config),
                         ))
